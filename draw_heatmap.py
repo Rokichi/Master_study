@@ -78,7 +78,8 @@ def draw_heatmap(filename, gazedatas):
     mat_img = cv2.addWeighted(annotated, 0.4, img, 0.6, 0)
     #cv2.imshow('', img)
     #cv2.waitKey(0)
-    cv2.imwrite(filename.replace('fig/', 'heatmap/').replace('.jpg', '.png'), mat_img)
+    #cv2.imwrite(filename.replace('fig/', 'heatmap/').replace('.png', '_heatmap.png'), mat_img)
+    cv2.imwrite(filename.replace('fig/', 'heatmap/'), mat_img)
 
 
 if __name__ == '__main__':
