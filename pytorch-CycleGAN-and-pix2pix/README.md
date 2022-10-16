@@ -1,4 +1,6 @@
 # python train.py --dataroot datasets --name gaze_dogs --model pix2pix --batch_size 64 --gpu_ids 0 --checkpoints_dir checkpoints --direction BtoA --n_epochs 1000 --n_epochs_decay 200
+# python test.py --dataroot datasets --name gaze_dogs --model pix2pix --gpu_ids 0 --checkpoints_dir checkpoints --direction BtoA --results_dir results
+
 <img src='imgs/horse2zebra.gif' align="right" width=384>
 
 <br><br><br>
