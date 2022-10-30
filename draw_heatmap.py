@@ -75,7 +75,7 @@ def rescale_images(images, width, height):
 # ヒートマップ作成
 
 
-def draw_heatmap(filename, gazedatas):
+def draw_heatmap(filename, gazedatas, radius = 1, point= 10):
     img = cv2.imread(filename)
     print(filename)
     annotated = cv2.cvtColor(img, cv2.COLOR_RGB2RGBA)
@@ -91,10 +91,10 @@ def draw_heatmap(filename, gazedatas):
 
     # 円でくり抜くところをカウント
     for gazedata in gazedatas:
-        for i in range(1, 16):
+        for i in range(1, radius + 1):
             for_add = black_img.copy()
             cv2.circle(for_add, tuple(gazedata), 5*i, color=(
-                10, 10, 10), thickness=-1)
+                point, point, point), thickness=-1)
             cal_img += for_add
     alphas = np.full(img.shape, 0.0, dtype=float)
     for j in range(len(cal_img)):
