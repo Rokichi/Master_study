@@ -31,12 +31,10 @@ def main():
         with open(img_to_csv[image], 'r') as f:
             gazedatas = get_fixed_gaze_data(
                 width, image, list(csv.reader((f)))[1:])
-            draw_heatmap(image, gazedatas)
-            return
+            draw_heatmap_fog(image, gazedatas)
+
 
 # 横のずれ直し
-
-
 def get_fixed_gaze_data(width, image, gazedatas):
     datas = []
     img = Image.open(image)
@@ -75,7 +73,7 @@ def rescale_images(images, width, height):
 # ヒートマップ作成
 
 
-def draw_heatmap(filename, gazedatas, radius = 1, point= 10):
+def draw_heatmap_fog(filename, gazedatas, radius=15, point=2):
     img = cv2.imread(filename)
     print(filename)
     annotated = cv2.cvtColor(img, cv2.COLOR_RGB2RGBA)
@@ -105,8 +103,21 @@ def draw_heatmap(filename, gazedatas, radius = 1, point= 10):
         for i in range(len(annotated[j])):
             annotated[j][i] = annotated[j][i] * alphas[j][i][0] + \
                 black_img[j][i]*(1-alphas[j][i][0])
-    cv2.imshow('', annotated)
-    cv2.waitKey(0)
+    cv2.imwrite(filename.replace('fig/', 'heatmap_fog/'), annotated)
+
+
+# ヒートマップ作成
+def draw_heatmap(filename, gazedatas):
+    img = cv2.imread(filename)
+    annotated = img.copy()
+    for gazedata in gazedatas:
+        cv2.circle(annotated, tuple(gazedata), 40, color=(
+            100, 100, 100), thickness=-1)
+    mat_img = cv2.addWeighted(annotated, 0.4, img, 0.6, 0)
+    #cv2.imshow('', img)
+    # cv2.waitKey(0)
+    #cv2.imwrite(filename.replace('fig/', 'heatmap/').replace('.png', '_heatmap.png'), mat_img)
+    cv2.imwrite(filename.replace('fig/', 'heatmap/'), mat_img)
 
 
 if __name__ == '__main__':
