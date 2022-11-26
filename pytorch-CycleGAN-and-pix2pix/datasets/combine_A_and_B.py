@@ -26,6 +26,7 @@ args = parser.parse_args()
 for arg in vars(args):
     print('[%s] = ' % arg, getattr(args, arg))
 
+print(args.fold_A)
 splits = os.listdir(args.fold_A)
 
 if not args.no_multiprocessing:
@@ -34,9 +35,7 @@ if not args.no_multiprocessing:
 for sp in splits:
     img_fold_A = os.path.join(args.fold_A, sp)
     img_fold_B = os.path.join(args.fold_B, sp)
-    print(os.getcwd())
     img_list = os.listdir(img_fold_A.replace('\\', '/'))
-    sys.exit()
     if args.use_AB:
         img_list = [img_path for img_path in img_list if '_A.' in img_path]
 
