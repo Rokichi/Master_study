@@ -12,11 +12,11 @@ def main():
     random.shuffle(images)
     for _ in range(split_num):
         image = images.pop(0)
-        heatmap = image.replace('fig/', 'heatmap/')
+        heatmap = image.replace('fig/', 'heatmap_fog/')
         shutil.copy(image, r'pytorch-CycleGAN-and-pix2pix\datasets\trainB')
         shutil.copy(heatmap, r'pytorch-CycleGAN-and-pix2pix\datasets\trainA')
     for image in images:
-        heatmap = image.replace('fig/', 'heatmap/')
+        heatmap = image.replace('fig/', 'heatmap_fog/')
         shutil.copy(image, r'pytorch-CycleGAN-and-pix2pix\datasets\testB')
         shutil.copy(heatmap, r'pytorch-CycleGAN-and-pix2pix\datasets\testA')
 
