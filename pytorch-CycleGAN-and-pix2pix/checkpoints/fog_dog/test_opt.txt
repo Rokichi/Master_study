@@ -32,7 +32,7 @@
                 output_nc: 3                             
                     phase: test                          
                preprocess: resize_and_crop               
-              results_dir: checkpoints_result_400        	[default: ./results/]
+              results_dir: checkpoints_result            	[default: ./results/]
            serial_batches: False                         
                    suffix:                               
                 use_wandb: False                         

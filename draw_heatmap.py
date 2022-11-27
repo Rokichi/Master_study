@@ -8,7 +8,7 @@ from PIL import Image
 from pprint import pprint
 
 isScaled = False
-
+save_sirectory = 'heatmap_fog_white/'
 
 def main():
     # get filenames
@@ -26,6 +26,11 @@ def main():
     if isScaled:
         rescale_images(images, width, height)
     img_to_csv: dict = make_dict_img_to_csv(images, csvs)
+    # フォルダ作成
+    try:
+        os.mkdir(save_sirectory.replace('/', ''))
+    except FileExistsError:
+        pass
     # 画像毎にヒートマップ作成
     for image in images:
         with open(img_to_csv[image], 'r') as f:
@@ -71,7 +76,7 @@ def rescale_images(images, width, height):
 
 
 # ヒートマップ作成
-def draw_heatmap_fog(filename, gazedatas, radius=15, point=2):
+def draw_heatmap_fog(filename, gazedatas, radius=15, point=3):
     img = cv2.imread(filename)
     print(filename)
     annotated = cv2.cvtColor(img, cv2.COLOR_RGB2RGBA)
@@ -99,11 +104,11 @@ def draw_heatmap_fog(filename, gazedatas, radius=15, point=2):
                 [val / 255 if val < 255 else 1.0 for val in cal_img[j][i][:3]])
     for j in range(len(annotated)):
         for i in range(len(annotated[j])):
-            annotated[j][i] = annotated[j][i] * alphas[j][i][0] + \
+            annotated[j][i] = 0 * alphas[j][i][0] + \
                 black_img[j][i]*(1-alphas[j][i][0])
     #cv2.imshow('', annotated)
     #cv2.waitKey(0)
-    cv2.imwrite(filename.replace('fig/', 'heatmap_fog/'), annotated)
+    cv2.imwrite(filename.replace('fig/', save_sirectory), annotated)
 
 
 # ヒートマップ作成
@@ -117,7 +122,7 @@ def draw_heatmap(filename, gazedatas):
     #cv2.imshow('', img)
     #cv2.waitKey(0)
     #cv2.imwrite(filename.replace('fig/', 'heatmap/').replace('.png', '_heatmap.png'), mat_img)
-    cv2.imwrite(filename.replace('fig/', 'heatmap/'), mat_img)
+    cv2.imwrite(filename.replace('fig/', save_sirectory), mat_img)
 
 
 if __name__ == '__main__':
