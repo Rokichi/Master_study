@@ -14,6 +14,7 @@ isScaled = False
 
 target_directory = 'images/'
 save_directory = target_directory.replace('/', '_marged/')
+webpage_title = 'epoch:500'
 
 
 def main():
@@ -26,12 +27,25 @@ def main():
     except FileExistsError:
         pass
 
+    webpage = f"""<!DOCTYPE html>
+<html>
+    <head>
+        <title>{webpage_title}</title>
+    </head>
+    <body>
+    """
     for key in sorted_keys:
         images = images_dict[key]
-        save_marged_image(key, images)
+        webpage += save_marged_image(key, images)
+    webpage += """
+    </body>
+</html>
+    """
+    with open(save_directory + 'index.html', 'w') as f:
+        f.write(webpage)
 
 
-def save_marged_image(key: str, images: List[cv2.Mat]):
+def save_marged_image(key: str, images: List[cv2.Mat]) -> str:
     # mkdir
     save_dir = save_directory + f'{key}/'
     try:
@@ -62,8 +76,47 @@ def save_marged_image(key: str, images: List[cv2.Mat]):
         blend_img_fake * (blend_img_fake[:, :, 3:] / 255)
 
     # save
+    cv2.imwrite(save_dir + real_A_filename, real_A)
     cv2.imwrite(save_dir + real_B_filename, marged_img_real)
     cv2.imwrite(save_dir + fake_B_filename, marged_img_fake)
+    return make_html_table(key, real_A_filename, real_B_filename, fake_B_filename)
+
+
+def make_html_table(key: str, real_A_filename: str, real_B_filename: str, fake_B_filename: str) -> str:
+    real_A_filename = f'{key}/' + real_A_filename
+    real_B_filename = f'{key}/' + real_B_filename
+    fake_B_filename = f'{key}/' + fake_B_filename
+    return f"""
+    <h3>{key}</h3>
+    <table border="1" style="table-layout: fixed;">
+    <tr>
+        <td halign="center" style="word-wrap: break-word;" valign="top">
+        <p>
+            <a href={real_A_filename}>
+            <img src={real_A_filename} style="width:256px">
+            </a><br>
+            <p>real_A</p>
+        </p>
+        </td>
+        <td halign="center" style="word-wrap: break-word;" valign="top">
+        <p>
+            <a href={real_B_filename}>
+            <img src={real_B_filename} style="width:256px">
+            </a><br>
+            <p>real_B</p>
+        </p>
+        </td>
+        <td halign="center" style="word-wrap: break-word;" valign="top">
+        <p>
+            <a href={fake_B_filename}>
+            <img src={fake_B_filename} style="width:256px">
+            </a><br>
+            <p>fake_B</p>
+        </p>
+        </td>
+    </tr>
+    </table>
+    """
 
 
 def get_alphas(original_img: cv2.Mat) -> cv2.Mat:
