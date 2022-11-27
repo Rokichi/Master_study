@@ -1,11 +1,8 @@
 # -*- coding: utf-8 -*-
 import sys
 import os
-import csv
 import cv2
 import numpy as np
-from PIL import Image
-from pprint import pprint
 from typing import List
 from typing import Dict
 
