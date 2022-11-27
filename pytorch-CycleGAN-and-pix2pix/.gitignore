@@ -42,6 +42,4 @@ test/data/legacy_serialized.pt
 #Ignore Wandb
 wandb/
 
-checkpoints_result
-checkpoints_result_500
-checkpoints_result_400
+checkpoints_result*
